@@ -1,0 +1,92 @@
+#!/usr/bin/env newlisp
+
+(setq prog-name "Battery status")
+(setq version "1.0.0")
+(setq release-year "2016")
+(setq version-string
+  (format "%s, version %s (%s)" prog-name version release-year))
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Library functions
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;;
+;;; Note that these thrushing macros were copied from the newLISP forum thread
+;;; here:
+;;; * http://www.newlispfanclub.alh.net/forum/viewtopic.php?f=16&t=4089&p=20296
+;;;
+;;; (c) 2012, William James & johu
+
+(context '->>)
+(define-macro (->>:->> E form)
+  (letex (_func
+          (if $args (cons '->> (cons (list '->> E form) $args))
+            (list? form) (push E form -1)
+            (list form E)))
+         _func))
+
+(context '->)
+(define-macro (->:-> E form)
+  (letex (_func
+          (if $args (cons '-> (cons (list '-> E form) $args))
+            (list? form) (push E form 1)
+            (list form E)))
+         _func ))
+
+(context MAIN)
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Supporting functions
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (get-bat-device-path)
+  (->> (exec "upower -e")
+       (map (lambda (x) (regex ".*BAT.*" x)))
+       (clean nil?)
+       (first)
+       (first)))
+
+(define (get-bat-info bat-path)
+  (exec (append "upower -i " bat-path)))
+
+(define (bat-info? line)
+  (or (find "state" line)
+      (find "to full" line)
+      (find "percentage" line)))
+
+(define (get-status)
+  (->> (get-bat-device-path)
+       (get-bat-info)
+       (filter bat-info?)))
+
+(define (usage)
+  (println)
+  (println version-string)
+  (println)
+  (getopts:usage))
+
+(define (display lines)
+  (map println lines))
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Entry point
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (main)
+  (println)
+  (println (append prog-name ":"))
+  (display (get-status)))
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Run the program
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(module "getopts.lsp")
+
+(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "?" (usage) nil "Print this help message")
+(shortopt "h" (usage) nil "Print this help message")
+(getopts (2 (main-args)))
+
+(main)
+(exit)
+
