@@ -6,33 +6,7 @@
 (setq version-string
   (format "%s, version %s (%s)" prog-name version release-year))
 
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;; Library functions
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;;
-;;; Note that these thrushing macros were copied from the newLISP forum thread
-;;; here:
-;;; * http://www.newlispfanclub.alh.net/forum/viewtopic.php?f=16&t=4089&p=20296
-;;;
-;;; (c) 2012, William James & johu
-
-(context '->>)
-(define-macro (->>:->> E form)
-  (letex (_func
-          (if $args (cons '->> (cons (list '->> E form) $args))
-            (list? form) (push E form -1)
-            (list form E)))
-         _func))
-
-(context '->)
-(define-macro (->:-> E form)
-  (letex (_func
-          (if $args (cons '-> (cons (list '-> E form) $args))
-            (list? form) (push E form 1)
-            (list form E)))
-         _func ))
-
-(context MAIN)
+(load "include/clj.lsp")
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
@@ -80,13 +54,48 @@
 ;;; Run the program
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+(define (parse-script-name argv)
+  (let (arg1 (first argv))
+    (case (length argv)
+      (0 "")
+      (1 (if (= arg1 "newlisp")
+            ""
+            arg1))
+      (true (if (= arg1 "newlisp")
+              (nth 1 argv)
+              arg1)))))
+
+(define (parse-opts argv)
+  (case (length argv)
+    (0 '())
+    (1 '())
+    (2 (1 argv))
+    (true (2 argv))))
+
 (module "getopts.lsp")
+
+(define (parse-args)
+  (letn ((argv (main-args))
+         (script (parse-script-name argv))
+         (opts (parse-opts argv)))
+    (getopts opts)
+    (list
+      (list "args" argv)
+      (list "script" script)
+      (list "opts" opts))))
 
 (shortopt "v" (getopts:die version-string) nil "Print version string")
 (shortopt "?" (usage) nil "Print this help message")
 (shortopt "h" (usage) nil "Print this help message")
-(getopts (2 (main-args)))
+
+(new Tree 'parsed)
+(parsed (parse-args))
+
+(println "DEBUG:")
+(println "Args:" (parsed "args"))
+(println "Script: " (parsed "script"))
+(println "Opts: " (parsed "opts"))
 
 (main)
-(exit)
+(exit))
 
