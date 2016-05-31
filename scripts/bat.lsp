@@ -91,11 +91,6 @@
 (new Tree 'parsed)
 (parsed (parse-args))
 
-(println "DEBUG:")
-(println "Args:" (parsed "args"))
-(println "Script: " (parsed "script"))
-(println "Opts: " (parsed "opts"))
-
 (main)
 (exit))
 
