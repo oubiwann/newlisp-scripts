@@ -1,12 +1,19 @@
 #!/usr/bin/env newlisp
 
+(module "getopts.lsp")
+
+(load "include/clj.lsp")
+(load "src/argparse.lsp")
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Constants
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 (setq prog-name "Battery status")
 (setq version "1.0.0")
 (setq release-year "2016")
 (setq version-string
   (format "%s, version %s (%s)" prog-name version release-year))
-
-(load "include/clj.lsp")
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
@@ -36,7 +43,7 @@
   (println)
   (println version-string)
   (println)
-  (getopts:usage))
+  (argparse:default-usage))
 
 (define (display lines)
   (map println lines))
@@ -48,49 +55,22 @@
 (define (main)
   (println)
   (println (append prog-name ":"))
-  (display (get-status)))
+  (display (get-status))
+  (exit))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;; Run the program
+;;; Set up and parse options
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (parse-script-name argv)
-  (let (arg1 (first argv))
-    (case (length argv)
-      (0 "")
-      (1 (if (= arg1 "newlisp")
-            ""
-            arg1))
-      (true (if (= arg1 "newlisp")
-              (nth 1 argv)
-              arg1)))))
-
-(define (parse-opts argv)
-  (case (length argv)
-    (0 '())
-    (1 '())
-    (2 (1 argv))
-    (true (2 argv))))
-
-(module "getopts.lsp")
-
-(define (parse-args)
-  (letn ((argv (main-args))
-         (script (parse-script-name argv))
-         (opts (parse-opts argv)))
-    (getopts opts)
-    (list
-      (list "args" argv)
-      (list "script" script)
-      (list "opts" opts))))
 
 (shortopt "v" (getopts:die version-string) nil "Print version string")
 (shortopt "?" (usage) nil "Print this help message")
 (shortopt "h" (usage) nil "Print this help message")
 
 (new Tree 'parsed)
-(parsed (parse-args))
+(parsed (argparse:get-args))
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Run the program
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (main)
-(exit))
-
