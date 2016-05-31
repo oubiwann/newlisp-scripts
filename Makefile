@@ -27,7 +27,8 @@ $(BUILD_DIR)/%.lsp: $(SCRIPT_DIR)/%.lsp
 	mkdir -p $(BUILD_DIR)
 	head -1 $< > $@
 	cat include/* >> $@
-	tail -n +2 $< | grep -v '(load "include' >> $@
+	cat src/* >> $@
+	tail -n +2 $< | grep -v '(load "' >> $@
 
 standalone: standalone-msg $(addprefix $(BIN_DIR)/, $(BINS))
 	chmod 755 $(BIN_DIR)/*
