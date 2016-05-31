@@ -37,9 +37,10 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (usage script)
-  (letn ((base-template "%s %-18s %s")
-         (opt-template (append "\t -" base-template))
-         (cmd-template (append "\t " base-template)))
+  (letn ((base-template "%s %-20s\t%s")
+         (short-opt-template (append "\t -" base-template))
+         (long-opt-template (append "\t--" base-template))
+         (cmd-template (append "\t  " base-template)))
     (println)
     (println version-string)
     (println)
@@ -49,10 +50,10 @@
     (println "Options:")
     (dolist
       (o getopts:short)
-      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
+      (println (format short-opt-template (o 0) "" (o 1 2))))
     (dolist
       (o getopts:long)
-      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
+      (println (format long-opt-template (o 0) "" (o 1 2))))
     (println)
     (println "Commands:")
     (println
