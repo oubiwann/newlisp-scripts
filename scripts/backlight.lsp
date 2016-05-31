@@ -10,7 +10,7 @@
 
 (setq prog-name "backlight")
 (setq desc "an xbacklight wrapper")
-(setq version "1.0.0")
+(setq version "1.1.0")
 (setq release-year "2016")
 (setq version-string
   (format "%s (%s), version %s (%s)" prog-name desc version release-year))
