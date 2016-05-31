@@ -24,8 +24,17 @@
        (>= value 1)
        (<= value 100)))
 
+(define (get-brightness)
+  (! "xbacklight -get"))
+
 (define (set-level value)
   (! (format "xbacklight -set %s" value)))
+
+(define (increment-brightness)
+  (! "xbacklight -inc 10"))
+
+(define (decrement-brightness)
+  (! "xbacklight -dec 10"))
 
 (define (display-bad-value level script)
   (print (format "\nERROR: the provided value '%s' is not valid " level))
@@ -42,8 +51,10 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (usage script)
-  (letn ((base-template "%s %-10s %s")
-         (opt-template (append "\t -" base-template)))
+  (letn ((base-template "%s %-20s\t%s")
+         (short-opt-template (append "\t -" base-template))
+         (long-opt-template (append "\t--" base-template))
+         (cmd-template (append "\t  " base-template)))
     (println)
     (println version-string)
     (println)
@@ -53,14 +64,31 @@
     (println "Options:")
     (dolist
       (o getopts:short)
-      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
+      (println (format short-opt-template (o 0) "" (o 1 2))))
     (dolist
       (o getopts:long)
-      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
+      (println (format long-opt-template (o 0) "" (o 1 2))))
     (println)
     (println "Value:")
     (println "\tThe 'value' parameter will be used to set the brightness level.")
     (println "\tAny value between 1 and 100 is valid.")
+    (println)
+    (println "Commands:")
+    (println
+      (format cmd-template
+              "inc"
+              ""
+              "Increase brightness by 10"))
+    (println
+      (format cmd-template
+              "dec"
+              ""
+              "Decrease brightness by 10"))
+    (println
+      (format cmd-template
+              "<none>"
+              ""
+              "If no comand is provided, the current brightness is returned"))
     (exit)))
 
 (shortopt "v" (getopts:die version-string) nil "Print version string")
@@ -75,11 +103,15 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (main script opts)
-  (letn ((light-level (first opts))
-         (int-level (integer light-level)))
-    (cond
-      ((light-value? int-level) (set-level light-level))
-      ('true (display-bad-value light-level script))))
+  (if (empty? opts)
+    (get-brightness)
+    (letn ((cmd-or-value (first opts))
+           (int-level (integer cmd-or-value)))
+      (cond
+        ((= cmd-or-value "inc") (increment-brightness))
+        ((= cmd-or-value "dec") (decrement-brightness))
+        ((light-value? int-level) (set-level light-level))
+        ('true (display-bad-value light-level script)))))
   (exit))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
