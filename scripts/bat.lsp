@@ -63,11 +63,11 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (shortopt "v" (getopts:die version-string) nil "Print version string")
-(shortopt "?" (usage) nil "Print this help message")
 (shortopt "h" (usage) nil "Print this help message")
+(longopt "help" (usage) nil "Print this help message")
 
 (new Tree 'parsed)
-(parsed (argparse:get-args))
+(parsed (argparse))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Run the program
