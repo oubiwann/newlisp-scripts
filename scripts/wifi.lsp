@@ -1,5 +1,13 @@
 #!/usr/bin/env newlisp
 
+(module "getopts.lsp")
+
+(load "src/argparse.lsp")
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Constants
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 (setq prog-name "Wifi wrapper")
 (setq version "1.0.0")
 (setq release-year "2016")
@@ -8,6 +16,24 @@
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (display-access-points)
+  (! "nmcli device wifi list"))
+
+(define (join-access-point opts)
+  (let ((ssid (nth 1 opts))
+        (password (nth 2 opts)))
+    (! (format "nmcli device wifi connect \"%s\" password %s"
+               ssid
+               password))))
+
+(define (display-unknown-cmd cmd script)
+  (println (format "\nError: Unknown command '%s'." cmd))
+  (usage script))
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Set up and parse options
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (usage script)
@@ -41,52 +67,33 @@
               "Join the access point with given password"))
     (exit)))
 
-(define (display-access-points)
-  (! "nmcli device wifi list"))
+(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "h" (usage (argparse:get-script)) nil "Print this help message")
+(longopt "help" (usage (argparse:get-script)) nil "Print this help message")
 
-(define (join-access-point opts)
-  (let ((ssid (nth 1 opts))
-        (password (nth 2 opts)))
-    (! (format "nmcli device wifi connect \"%s\" password %s"
-               ssid
-               password))))
-
-(define (display-unknown-cmd script)
-  (println "\nError: Unknown command")
-  (usage script))
+(new Tree 'parsed)
+(parsed (argparse))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Entry point
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (main script opts)
-  (case (first opts)
-    ("scan" (display-access-points))
-    ("join" (join-access-point opts))
-    (true (display-unknown-cmd script)))
+  (cond
+    ((empty? opts)
+      (println)
+      (println "ERROR: either an option or a command must be provided.")
+      (usage script)))
+  (let ((cmd (first opts)))
+    (case cmd
+      ("scan" (display-access-points))
+      ("join" (join-access-point opts))
+      (true (display-unknown-cmd cmd script))))
   (exit))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Run the program
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(module "getopts.lsp")
-
-(setq *args* (main-args))
-(setq *script* (nth 1 *args*))
-(setq *opts* (2 *args*))
-
-(shortopt "v" (getopts:die version-string) nil "Print version string")
-(shortopt "?" (usage *script*) nil "Print this help message")
-(shortopt "h" (usage *script*) nil "Print this help message")
-
-(cond
-  ((empty? *opts*)
-    (println)
-    (println "Error: either an option or a command must be provided.")
-    (usage *script*)))
-
-(getopts *opts*)
-
-(main *script* *opts*)
-
+(main (parsed "script")
+      (parsed "opts"))
