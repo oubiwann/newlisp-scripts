@@ -1,5 +1,13 @@
 #!/usr/bin/env newlisp
 
+(module "getopts.lsp")
+
+(load "src/argparse.lsp")
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Constants
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 (setq prog-name "backlight")
 (setq desc "an xbacklight wrapper")
 (setq version "1.0.0")
@@ -10,27 +18,6 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (usage script)
-  (letn ((base-template "%s %-10s %s")
-         (opt-template (append "\t -" base-template)))
-    (println)
-    (println version-string)
-    (println)
-    (println
-      (format "Usage: %s [options|value]" script))
-    (println)
-    (println "Options:")
-    (dolist
-      (o getopts:short)
-      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
-    (dolist
-      (o getopts:long)
-      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
-    (println)
-    (print "The 'value' parameter will be used to set the brightness level. ")
-    (println "Any value between 1 and 100 is valid.")
-    (exit)))
 
 (define (light-value? value)
   (and (integer? value)
@@ -51,6 +38,39 @@
   (usage script))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+;;; Set up and parse options
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (usage script)
+  (letn ((base-template "%s %-10s %s")
+         (opt-template (append "\t -" base-template)))
+    (println)
+    (println version-string)
+    (println)
+    (println
+      (format "Usage: %s [options|value]" script))
+    (println)
+    (println "Options:")
+    (dolist
+      (o getopts:short)
+      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
+    (dolist
+      (o getopts:long)
+      (println (format opt-template (o 0) (or (o 1 1) "") (o 1 2))))
+    (println)
+    (println "Value:")
+    (println "\tThe 'value' parameter will be used to set the brightness level.")
+    (println "\tAny value between 1 and 100 is valid.")
+    (exit)))
+
+(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "h" (usage (argparse:get-script)) nil "Print this help message")
+(longopt "help" (usage (argparse:get-script)) nil "Print this help message")
+
+(new Tree 'parsed)
+(parsed (argparse))
+
+;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Entry point
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -66,23 +86,5 @@
 ;;; Run the program
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(module "getopts.lsp")
-
-(setq *args* (main-args))
-(setq *script* (nth 1 *args*))
-(setq *opts* (2 *args*))
-
-(shortopt "v" (getopts:die version-string) nil "Print version string")
-(shortopt "?" (usage *script*) nil "Print this help message")
-(shortopt "h" (usage *script*) nil "Print this help message")
-
-(cond
-  ((empty? *opts*)
-    (println)
-    (println "Error: either an option or a value must be provided.")
-    (usage *script*)))
-
-(getopts *opts*)
-
-(main *script* *opts*)
-
+(main (parsed "script")
+      (parsed "opts"))
