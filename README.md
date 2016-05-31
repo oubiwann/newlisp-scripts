@@ -9,7 +9,7 @@
 
 * [Introduction](#introduction-)
 * [Dependencies](#dependencies-)
-* [Build & Install](#build-install-)
+* [Build & Install](#build--install-)
 * [Running](#running-)
 * [License](#license-)
 
