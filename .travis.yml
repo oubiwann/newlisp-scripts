@@ -1,0 +1,6 @@
+sudo: true
+install: true
+before_script:
+    - wget http://www.newlisp.org/downloads/newlisp_10.7.0-utf8_amd64.deb
+    - sudo dpkg -i newlisp_10.7.0-utf8_amd64.deb
+script: make check
