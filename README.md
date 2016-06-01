@@ -62,6 +62,38 @@ Note if you are running on *BSD, you will need to use ``gmake`` instead of ``mak
 Once installed, running the scripts is just like any other *NIX executable. All scripts
 support the ``-h`` option that you can examine for their simple usage.
 
+Here are some quick examples:
+
+```
+$ bat
+```
+```
+Battery status:
+    state:               fully-charged
+    percentage:          99%
+```
+
+```
+$ wifi scan
+```
+```
+*  SSID                 MODE   CHAN  RATE       SIGNAL  BARS  SECURITY
+   middleearth          Infra  9     54 Mbit/s  44      ▂▄__  WPA2
+   middleearth-guest    Infra  9     54 Mbit/s  44      ▂▄__  WPA2
+   middleearth-guest    Infra  149   54 Mbit/s  30      ▂___  WPA2
+   Kim's Wi-Fi Network  Infra  11    54 Mbit/s  19      ▂___  WPA2
+   NETGEAR67            Infra  11    54 Mbit/s  15      ▂___  WPA2
+   Airlink101           Infra  11    54 Mbit/s  14      ▂___  WPA2
+   middleearth          Infra  149   54 Mbit/s  30      ▂___  WPA2
+*  middleearth          Infra  149   54 Mbit/s  49      ▂▄__  WPA2
+```
+```
+$ backlight 95
+94.953052
+$ backlight inc
+100.000000
+```
+
 
 ## License [&#x219F;](#contents)
 
