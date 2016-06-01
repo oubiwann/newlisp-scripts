@@ -28,13 +28,16 @@
   (! "xbacklight -get"))
 
 (define (set-level value)
-  (! (format "xbacklight -set %s" value)))
+  (! (format "xbacklight -set %s" value))
+  (get-brightness))
 
 (define (increment-brightness)
-  (! "xbacklight -inc 10"))
+  (! "xbacklight -inc 10")
+  (get-brightness))
 
 (define (decrement-brightness)
-  (! "xbacklight -dec 10"))
+  (! "xbacklight -dec 10")
+  (get-brightness))
 
 (define (display-bad-value level script)
   (print (format "\nERROR: the provided value '%s' is not valid " level))
@@ -105,12 +108,11 @@
 (define (main script opts)
   (if (empty? opts)
     (get-brightness)
-    (letn ((cmd-or-value (first opts))
-           (int-level (integer cmd-or-value)))
+    (let ((cmd-or-value (first opts)))
       (cond
         ((= cmd-or-value "inc") (increment-brightness))
         ((= cmd-or-value "dec") (decrement-brightness))
-        ((light-value? int-level) (set-level light-level))
+        ((light-value? (integer cmd-or-value)) (set-level cmd-or-value))
         ('true (display-bad-value light-level script)))))
   (exit))
 
