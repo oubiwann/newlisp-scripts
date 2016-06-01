@@ -1,4 +1,4 @@
-# newlisp-scripts [![Build Status][travis-badge]][travis]
+# newlisp-scripts [![Build Status][travis-badge]][travis][![GitHub tag][github-tag]]()
 
 *A collection of command line wrapers, written in newLISP*
 
@@ -78,3 +78,4 @@ Distributed under the BSD 2-Clause License.
 [travis-badge]: https://travis-ci.org/oubiwann/newlisp-scripts.png?branch=master
 [newlisp-logo]: resources/images/logo-white-small.png
 [newlisp-logo-large]: resources/images/logo-white.png
+[github-tag]: https://img.shields.io/github/tag/oubiwann/newlisp-scripts.svg?maxAge=2592000
