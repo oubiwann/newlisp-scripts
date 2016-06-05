@@ -25,14 +25,15 @@
 (define (get-script)
   (get-script-name (main-args)))
 
-(define (get-opts argv)
-  (case (length argv)
+(define (-get-opts argv-tail)
+  (case (length argv-tail)
     (0 '())
-    (1 '())
-    (2 (if (= (first argv) "newlisp")
-         '()
-         (1 argv)))
-    (true (2 argv))))
+    (true argv-tail)))
+
+(define (get-opts argv)
+  (if (starts-with (first argv) "newlisp")
+     (-get-opts (2 argv))
+     (-get-opts (1 argv))))
 
 (define (argparse:argparse)
   (letn ((argv (main-args))
