@@ -87,10 +87,25 @@ $ wifi scan
    middleearth          Infra  149   54 Mbit/s  30      ▂___  WPA2
 *  middleearth          Infra  149   54 Mbit/s  49      ▂▄__  WPA2
 ```
+
+```
+$ wifi join hhonors
+```
+```
+Connecting to SSID hhonors ...
+Connection with UUID '50001b43-2b58-406a-a740-ea06d5dea584' created and activated on device 'wlan0'
+```
+
 ```
 $ backlight 95
+```
+```
 94.953052
+```
+```
 $ backlight inc
+```
+```
 100.000000
 ```
 
