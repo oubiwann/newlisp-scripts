@@ -22,13 +22,15 @@
   (println (format "\nERROR: Unknown command '%s'." cmd))
   (usage script))
 
-(define (display-missing-subcmd cmd subcmd script)
-  (println (format "\nERROR: Command '%s' is missing required subcommand."
-                   cmd)))
+(define (display-missing-subarg cmd script)
+  (println (format "\nERROR: Command '%s' is missing a required argument."
+                   cmd))
+  (usage script))
 
-(define (display-unknown-subcmd cmd subcmd script)
-  (println (format "\nERROR: Unknown subcommand '%s' for command '%s'."
-                   subcmd cmd)))
+(define (display-unknown-subarg cmd subarg script)
+  (println (format "\nERROR: Unknown argument '%s' for command '%s'."
+                   subarg cmd))
+  (usage script))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
@@ -37,11 +39,9 @@
 (define (display-access-points)
   (! "nmcli device wifi list"))
 
-(define (join-access-point cmd-args)
+(define (join-access-point cmd-args script)
   (if (= cmd-args '())
-    (begin
-      (display-missing-subcmd "join")
-      (usage script)))
+     (display-missing-subarg "join" script))
   (let ((ssid (first cmd-args))
         (cmd-args (rest cmd-args)))
     (println (format "Connecting to SSID %s ..." ssid))
@@ -108,7 +108,7 @@
         (cmd-args (rest opts)))
     (case cmd
       ("scan" (display-access-points))
-      ("join" (join-access-point cmd-args))
+      ("join" (join-access-point cmd-args script))
       (true (display-unknown-cmd cmd script))))
   (exit))
 
