@@ -3,6 +3,7 @@
 (module "getopts.lsp")
 
 (load "src/argparse.lsp")
+(load "src/os.lsp")
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Constants
@@ -106,6 +107,8 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (main script opts)
+  (println)
+  (os:platform-check '("Linux"))
   (if (empty? opts)
     (get-brightness)
     (let ((cmd-or-value (first opts)))

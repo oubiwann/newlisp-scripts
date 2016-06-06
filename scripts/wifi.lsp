@@ -3,6 +3,7 @@
 (module "getopts.lsp")
 
 (load "src/argparse.lsp")
+(load "src/os.lsp")
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Constants
@@ -99,6 +100,8 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (define (main script opts)
+  (println)
+  (os:platform-check '("Linux"))
   (cond
     ((empty? opts)
       (println)

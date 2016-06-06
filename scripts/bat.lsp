@@ -4,6 +4,7 @@
 
 (load "include/clj.lsp")
 (load "src/argparse.lsp")
+(load "src/os.lsp")
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Constants
@@ -65,6 +66,7 @@
 
 (define (main)
   (println)
+  (os:platform-check '("Linux"))
   (println (append prog-name ":"))
   (display (get-status))
   (exit))
