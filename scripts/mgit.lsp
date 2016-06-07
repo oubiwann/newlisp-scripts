@@ -9,11 +9,11 @@
 ;;; Constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq prog-name "Multi-Git")
+(setq short-desc "Multi-Git")
 (setq version "1.3.0")
 (setq release-year "2016")
 (setq version-string
-  (format "%s, version %s (%s)" prog-name version release-year))
+  (format "%s - version %s (%s)" short-desc version release-year))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Error functions
@@ -26,6 +26,13 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (script-info script-name)
+  (format "%s, %s" script-name version-string))
+
+(define (display-script-info script-name)
+  (println (script-info script-name))
+  (exit))
 
 (define (display lines)
   (map (lambda (line) (println (string "\t" line))) lines))
@@ -117,7 +124,7 @@
               "Perform 'git status' in multiple paths"))
     (exit)))
 
-(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "v" (display-script-info (argparse:get-script)) nil "Print version string")
 (shortopt "h" (usage (argparse:get-script)) nil "Print this help message")
 (longopt "help" (usage (argparse:get-script)) nil "Print this help message")
 

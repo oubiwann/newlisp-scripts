@@ -9,16 +9,22 @@
 ;;; Constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq prog-name "backlight")
-(setq desc "an xbacklight wrapper")
+(setq short-desc "An xbacklight wrapper")
 (setq version "1.3.0")
 (setq release-year "2016")
 (setq version-string
-  (format "%s (%s), version %s (%s)" prog-name desc version release-year))
+  (format "%s - version %s (%s)" short-desc version release-year))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (script-info script-name)
+  (format "%s, %s" script-name version-string))
+
+(define (display-script-info script-name)
+  (println (script-info script-name))
+  (exit))
 
 (define (light-value? value)
   (and (integer? value)
@@ -95,7 +101,7 @@
               "If no comand is provided, the current brightness is returned"))
     (exit)))
 
-(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "v" (display-script-info (argparse:get-script)) nil "Print version string")
 (shortopt "h" (usage (argparse:get-script)) nil "Print this help message")
 (longopt "help" (usage (argparse:get-script)) nil "Print this help message")
 

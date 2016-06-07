@@ -9,11 +9,11 @@
 ;;; Constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq prog-name "Wifi wrapper")
+(setq short-desc "An nmcli wrapper")
 (setq version "1.3.0")
 (setq release-year "2016")
 (setq version-string
-  (format "%s, version %s (%s)" prog-name version release-year))
+  (format "%s - version %s (%s)" short-desc version release-year))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Error functions
@@ -36,6 +36,13 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (script-info script-name)
+  (format "%s, %s" script-name version-string))
+
+(define (display-script-info script-name)
+  (println (script-info script-name))
+  (exit))
 
 (define (display-access-points)
   (! "nmcli device wifi list"))
@@ -88,7 +95,7 @@
               "Join the access point with given password"))
     (exit)))
 
-(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "v" (display-script-info (argparse:get-script)) nil "Print version string")
 (shortopt "h" (usage (argparse:get-script)) nil "Print this help message")
 (longopt "help" (usage (argparse:get-script)) nil "Print this help message")
 
@@ -105,7 +112,7 @@
   (cond
     ((empty? opts)
       (println)
-      (println "ERROR: either an option or a command must be provided.")
+      (println "ERROR: either an option or a command must be provided")
       (usage script)))
   (let ((cmd (first opts))
         (cmd-args (rest opts)))

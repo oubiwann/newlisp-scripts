@@ -10,15 +10,22 @@
 ;;; Constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq prog-name "Battery status")
+(setq short-desc "Battery status tool")
 (setq version "1.3.0")
 (setq release-year "2016")
 (setq version-string
-  (format "%s, version %s (%s)" prog-name version release-year))
+  (format "%s - version %s (%s)" short-desc version release-year))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+(define (script-info script-name)
+  (format "%s, %s" script-name version-string))
+
+(define (display-script-info script-name)
+  (println (script-info script-name))
+  (exit))
 
 (define (get-bat-device-path)
   (->> (exec "upower -e")
@@ -53,7 +60,7 @@
 ;;; Set up and parse options
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(shortopt "v" (getopts:die version-string) nil "Print version string")
+(shortopt "v" (display-script-info (argparse:get-script)) nil "Print version string")
 (shortopt "h" (usage) nil "Print this help message")
 (longopt "help" (usage) nil "Print this help message")
 
