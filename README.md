@@ -53,7 +53,7 @@ $ make
 $ sudo make install
 ```
 
-**Be careful** with that one! If you have files in ``INSTALL_DIR`` with the same name as the
+**>>> WARNING <<<** *Be careful* with that one! If you have files in ``INSTALL_DIR`` with the same name as the
 binaries created with ``make compile``, they will be **overwritten**.
 
 Note if you are running on *BSD, you will need to use ``gmake`` instead of ``make``.
@@ -79,15 +79,19 @@ Battery status:
 $ wifi scan
 ```
 ```
-*  SSID                 MODE   CHAN  RATE       SIGNAL  BARS  SECURITY
-   middleearth          Infra  9     54 Mbit/s  44      ▂▄__  WPA2
-   middleearth-guest    Infra  9     54 Mbit/s  44      ▂▄__  WPA2
-   middleearth-guest    Infra  149   54 Mbit/s  30      ▂___  WPA2
-   Kim's Wi-Fi Network  Infra  11    54 Mbit/s  19      ▂___  WPA2
-   NETGEAR67            Infra  11    54 Mbit/s  15      ▂___  WPA2
-   Airlink101           Infra  11    54 Mbit/s  14      ▂___  WPA2
-   middleearth          Infra  149   54 Mbit/s  30      ▂___  WPA2
-*  middleearth          Infra  149   54 Mbit/s  49      ▂▄__  WPA2
+*  SSID             MODE   CHAN  RATE       SIGNAL  BARS  SECURITY
+   --               Infra  2     54 Mbit/s  20      ▂___  WPA2
+   ATT-WIFI-5424    Infra  6     54 Mbit/s  15      ▂___  WPA2
+   Managers         Infra  11    54 Mbit/s  10      ▂___  WPA1 WPA2
+   hhonors          Infra  1     54 Mbit/s  84      ▂▄▆█  --
+   attwifi          Infra  11    54 Mbit/s  57      ▂▄▆_  --
+   Fairfield-GUEST  Infra  11    54 Mbit/s  42      ▂▄__  --
+   hhonors          Infra  6     54 Mbit/s  40      ▂▄__  --
+   attwifi          Infra  1     54 Mbit/s  30      ▂___  --
+   hhonors          Infra  1     54 Mbit/s  29      ▂___  --
+   Fairfield-GUEST  Infra  8     54 Mbit/s  24      ▂___  --
+   attwifi          Infra  11    54 Mbit/s  24      ▂___  --
+   Fairfield-GUEST  Infra  11    54 Mbit/s  22      ▂___  --
 ```
 
 ```
