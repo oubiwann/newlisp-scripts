@@ -10,7 +10,7 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (setq prog-name "Wifi wrapper")
-(setq version "1.2.1")
+(setq version "1.3.0")
 (setq release-year "2016")
 (setq version-string
   (format "%s, version %s (%s)" prog-name version release-year))
