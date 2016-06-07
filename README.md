@@ -157,11 +157,11 @@ To support the writing of the scripts and executables in this repo, additions
 have been made to the source that are not included in the newLISP distribution.
 In particular:
 
-### Macros
+**Macros**:
 
 * ``include/clj.lsp`` - Clojure-inspired thrushing macros: ``->``, ``->>``
 
-### Functions
+**Functions**:
 
 * ``src/argparse.lsp`` - Functions for parsing script args/options when called as a script and when called as a linked executable: ``get-script``, ``get-opts``, ``default-usage``, ``argparse``
 * ``src/os.lsp`` - Functions for extracting info from the OS: ``uname``
