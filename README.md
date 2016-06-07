@@ -64,7 +64,7 @@ Note if you are running on *BSD, you will need to use ``gmake`` instead of ``mak
 ## Running [&#x219F;](#contents)
 
 Once installed, running the scripts is just like any other *NIX executable. All scripts
-support the ``-h`` option that you can examine for their simple usage.
+support the ``-h`` (or ``--help``) option that you can examine for their simple usage.
 
 Here are some quick examples:
 
