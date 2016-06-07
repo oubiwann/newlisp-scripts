@@ -2,6 +2,7 @@
 
 (module "getopts.lsp")
 
+(load "include/const.lsp")
 (load "include/clj.lsp")
 (load "src/argparse.lsp")
 (load "src/os.lsp")
@@ -11,8 +12,6 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 (setq short-desc "Battery status tool")
-(setq version "1.3.0")
-(setq release-year "2016")
 (setq version-string
   (format "%s - version %s (%s)" short-desc version release-year))
 
