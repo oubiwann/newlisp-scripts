@@ -26,6 +26,7 @@ So far, this repo provides the following executables:
 * ``wifi`` - A wrapper for a ``nmcli`` (just the access points list and the connect command)
 * ``bat`` - A wrapper for the combination of commands necessary to extract current laptop battery status
 * ``backlight`` - A wrapper for ``xbacklight``
+* ``mgit`` - A wrapper for ``git`` for running a few commands on multiple project paths
 
 
 ## Dependencies [&#x219F;](#contents)
@@ -108,6 +109,45 @@ $ backlight inc
 ```
 ```
 100.000000
+```
+
+```
+$ mgit branch ~/lab/USGS/lcmap-*
+```
+```
+Current branch in /home/oubiwann/lab/USGS/lcmap-client-clj ...
+    * master
+      topic/uberconf
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-client-docs ...
+    * master
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-client-py ...
+    * master
+      topic/get-rod
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-config ...
+    * master
+      topic/uberconf
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-dockerfiles ...
+    * master
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-event ...
+    * master
+      topic/uberconf
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-ingest-py ...
+      change-to-ubid
+    * master
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-logger ...
+    * master
+
+Current branch in /home/oubiwann/lab/USGS/lcmap-see ...
+    * master
+      topic/improve-see
+      topic/uberconf
 ```
 
 
