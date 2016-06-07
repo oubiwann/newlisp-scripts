@@ -53,7 +53,9 @@ $ make
 $ sudo make install
 ```
 
-**>>> WARNING <<<** *Be careful* with that one! If you have files in ``INSTALL_DIR`` with the same name as the
+**>>> WARNING <<<**
+
+*Be careful* with that one! If you have files in ``INSTALL_DIR`` with the same name as the
 binaries created with ``make compile``, they will be **overwritten**.
 
 Note if you are running on *BSD, you will need to use ``gmake`` instead of ``make``.
