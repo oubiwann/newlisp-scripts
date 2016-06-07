@@ -65,8 +65,9 @@ Note if you are running on *BSD, you will need to use ``gmake`` instead of ``mak
 
 Once installed, running the scripts is just like any other *NIX executable. All scripts
 support the ``-h`` (or ``--help``) option that you can examine for their simple usage.
+Below are some quick examples.
 
-Here are some quick examples:
+##### ``bat``
 
 ```
 $ bat
@@ -76,6 +77,8 @@ Battery status:
     state:               fully-charged
     percentage:          99%
 ```
+
+##### ``wifi``
 
 ```
 $ wifi scan
@@ -104,6 +107,8 @@ Connecting to SSID hhonors ...
 Connection with UUID '50001b43-2b58-406a-a740-ea06d5dea584' created and activated on device 'wlan0'
 ```
 
+##### ``backlight``
+
 ```
 $ backlight 95
 ```
@@ -116,6 +121,8 @@ $ backlight inc
 ```
 100.000000
 ```
+
+##### ``mgit``
 
 ```
 $ mgit branch ~/lab/USGS/lcmap-*
