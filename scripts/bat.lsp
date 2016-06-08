@@ -11,7 +11,8 @@
 ;;; Constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq short-desc "Battery status tool")
+(setq heading "Battery status")
+(setq short-desc (format "%s tool" heading))
 (setq version-string
   (format "%s - version %s (%s)" short-desc version release-year))
 
@@ -73,7 +74,7 @@
 (define (main)
   (println)
   (os:platform-check '("Linux"))
-  (println (append prog-name ":"))
+  (println (append heading ":"))
   (display (get-status))
   (exit))
 
