@@ -14,6 +14,28 @@
 (setq short-desc "An xbacklight wrapper")
 (setq version-string
   (format "%s - version %s (%s)" short-desc version release-year))
+(setq mac-get-brightness-cmd
+  (string "ioreg -c AppleBacklightDisplay -k IODisplayParameters -f -a"
+          "|"
+          "grep -A 7 '<key>brightness</key>'"
+          "|"
+          "grep -A 1 '<key>value</key>'"
+          "|"
+          "tail -1|tr \\\> :|tr \\\< :"
+          "|"
+          "awk -F: '{print \$3}'"))
+(setq mac-inc "key code 113")
+(setq mac-dec "key code 107")
+(setq mac-update-brightness-cmd
+  (string "osascript"
+          " -e 'tell application \"System Events\"'"
+          " -e '%s'"
+          " -e 'end tell'"))
+(setq mac-repeat-update-brightness-cmd
+  (string "osascript"
+          " -e 'tell application \"System Events\" to repeat %d times'"
+          " -e '%s'"
+          " -e 'end repeat'"))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
@@ -26,28 +48,70 @@
   (println (script-info script-name))
   (exit))
 
+(define (display-unsupported-cmd sys cmd)
+  (println (format "The '%s' command is not supported on %s." cmd sys))
+  (exit))
+
+(define (brightness-linux sys cmd value)
+  (case cmd
+    ("get" (! "xbacklight -get"))
+    ("set" (! (string "xbacklight -set " value)) )
+    ("inc" (! (string "xbacklight -inc 10")))
+    ("dec" (! (string "xbacklight -dec 10")))
+    (true (display-unsupported-cmd sys cmd))))
+
+(define (get-mac-brightness)
+  (-> mac-get-brightness-cmd
+      (exec)
+      (first)
+      (integer)
+      (div 256)
+      (mul 100)))
+
+(define (set-mac-brightness level)
+  (! (format mac-repeat-update-brightness-cmd 16 mac-dec))
+  (! (format mac-repeat-update-brightness-cmd
+             (ceil (mul (div (integer level) 100) 16))
+             mac-inc)))
+
+(define (brightness-mac sys cmd value)
+  (case cmd
+    ("get" (get-mac-brightness))
+    ("set" (set-mac-brightness value))
+    ("inc" (! (format mac-update-brightness-cmd mac-inc)))
+    ("dec" (! (format mac-update-brightness-cmd mac-dec)))
+    (true (display-unsupported-cmd sys cmd))))
+
+(define (brightness-cmd cmd value)
+  (let ((sys (os:system)))
+    (case sys
+      ("Linux" (brightness-linux sys cmd value))
+      ("Darwin" (brightness-mac sys cmd value))
+      (true  (display-unsupported-cmd sys cmd)))))
+
 (define (light-value? value)
   (and (integer? value)
        (>= value 1)
        (<= value 100)))
 
 (define (get-brightness)
-  (! "xbacklight -get"))
+  (println (brightness-cmd "get" "")))
 
 (define (set-level value)
-  (! (format "xbacklight -set %s" value))
+  (brightness-cmd "set" value)
   (get-brightness))
 
 (define (increment-brightness)
-  (! "xbacklight -inc 10")
+  (brightness-cmd "inc" 10)
   (get-brightness))
 
 (define (decrement-brightness)
-  (! "xbacklight -dec 10")
+  (brightness-cmd "dec" 10)
   (get-brightness))
 
 (define (display-bad-value level script)
-  (print (format "\nERROR: the provided value '%s' is not valid " level))
+  (print (format "\nERROR: the provided value '%s' is not valid "
+                 (string level)))
   (println "brightness level.")
   (cond
     ((= level "0")
@@ -114,7 +178,7 @@
 
 (define (main script opts)
   (println)
-  (os:platform-check '("Linux"))
+  (os:platform-check '("Linux" "Darwin"))
   (if (empty? opts)
     (get-brightness)
     (let ((cmd-or-value (first opts)))
@@ -122,7 +186,7 @@
         ((= cmd-or-value "inc") (increment-brightness))
         ((= cmd-or-value "dec") (decrement-brightness))
         ((light-value? (integer cmd-or-value)) (set-level cmd-or-value))
-        ('true (display-bad-value light-level script)))))
+        ('true (display-bad-value cmd-or-value script)))))
   (exit))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
