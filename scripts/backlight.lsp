@@ -11,7 +11,7 @@
 ;;; Constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq short-desc "An xbacklight wrapper")
+(setq short-desc "A system-agnostic screen brightness wrapper")
 (setq version-string
   (format "%s - version %s (%s)" short-desc version release-year))
 (setq mac-get-brightness-cmd
