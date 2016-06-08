@@ -3,6 +3,7 @@
 (module "getopts.lsp")
 
 (load "include/const.lsp")
+(load "include/clj.lsp")
 (load "src/argparse.lsp")
 (load "src/os.lsp")
 
