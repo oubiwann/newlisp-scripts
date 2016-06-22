@@ -2,5 +2,5 @@
 ;;; Common script constants
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(setq version "1.3.1")
+(setq version "1.4.0")
 (setq release-year "2016")

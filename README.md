@@ -25,7 +25,7 @@ So far, this repo provides the following executables:
 
 * ``wifi`` - A wrapper for a ``nmcli`` (just the access points list and the connect command)
 * ``bat`` - A wrapper for the combination of commands necessary to extract current laptop battery status
-* ``backlight`` - A wrapper for ``xbacklight``
+* ``backlight`` - On Linux, this wraps ``xbacklight``; on Mac OS X, it wraps AppleScript brightness settings
 * ``mgit`` - A wrapper for ``git`` for running a few commands on multiple project paths
 
 
