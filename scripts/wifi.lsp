@@ -2,6 +2,7 @@
 
 (module "getopts.lsp")
 
+(load "include/clj.lsp")
 (load "include/const.lsp")
 (load "src/argparse.lsp")
 (load "src/os.lsp")
@@ -53,7 +54,7 @@
         (cmd-args (rest cmd-args)))
     (println (format "Connecting to SSID %s ..." ssid))
     (if (= cmd-args '())
-      (! (string "nmcli device wifi connect " ssid))
+      (! (format "nmcli device wifi connect \"%s\"" ssid))
       (! (format "nmcli device wifi connect \"%s\" password %s"
                  ssid
                  (first cmd-args))))))
