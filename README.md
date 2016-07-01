@@ -27,6 +27,7 @@ So far, this repo provides the following executables:
 * ``bat`` - A wrapper for the combination of commands necessary to extract current laptop battery status
 * ``backlight`` - On Linux, this wraps ``xbacklight``; on Mac OS X, it wraps AppleScript brightness settings
 * ``mgit`` - A wrapper for ``git`` for running a few commands on multiple project paths
+* ``vol`` - A wrapper for ``amixer -D pulse`` to set, increment, and get the master volume
 
 
 ## Dependencies [&#x219F;](#contents)
@@ -161,6 +162,51 @@ Current branch in /home/oubiwann/lab/USGS/lcmap-see ...
     * master
       topic/improve-see
       topic/uberconf
+```
+
+##### ``vol``
+
+```
+$ vol
+```
+```
+30%
+```
+```
+$ vol mute
+```
+```
+Audio output: off
+```
+```
+$ vol mute
+```
+```
+Audio output: on
+```
+```
+$ vol inc
+```
+```
+35%
+```
+$ vol 50
+```
+```
+50%
+```
+```
+$ vol dec
+```
+```
+45%
+```
+```
+$ vol balance
+```
+```
+Right: 45%
+Left: 45%
 ```
 
 
