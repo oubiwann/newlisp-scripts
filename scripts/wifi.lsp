@@ -4,6 +4,7 @@
 
 (load "include/clj.lsp")
 (load "include/const.lsp")
+(load "include/script.lsp")
 (load "src/argparse.lsp")
 (load "src/os.lsp")
 
@@ -16,33 +17,8 @@
   (format "%s - version %s (%s)" short-desc version release-year))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;; Error functions
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (display-unknown-cmd cmd script)
-  (println (format "\nERROR: Unknown command '%s'." cmd))
-  (usage script))
-
-(define (display-missing-subarg cmd script)
-  (println (format "\nERROR: Command '%s' is missing a required argument."
-                   cmd))
-  (usage script))
-
-(define (display-unknown-subarg cmd subarg script)
-  (println (format "\nERROR: Unknown argument '%s' for command '%s'."
-                   subarg cmd))
-  (usage script))
-
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (script-info script-name)
-  (format "%s, %s" script-name version-string))
-
-(define (display-script-info script-name)
-  (println (script-info script-name))
-  (exit))
 
 (define (display-access-points)
   (! "nmcli device wifi list"))

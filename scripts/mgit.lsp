@@ -4,7 +4,9 @@
 
 (load "include/const.lsp")
 (load "include/clj.lsp")
+(load "include/script.lsp")
 (load "src/argparse.lsp")
+(load "src/os.lsp")
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Constants
@@ -15,23 +17,8 @@
   (format "%s - version %s (%s)" short-desc version release-year))
 
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-;;; Error functions
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (display-unknown-cmd cmd script)
-  (println (format "\nERROR: Unknown command '%s'." cmd))
-  (usage script))
-
-;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (script-info script-name)
-  (format "%s, %s" script-name version-string))
-
-(define (display-script-info script-name)
-  (println (script-info script-name))
-  (exit))
 
 (define (display lines)
   (map (lambda (line) (println (string "\t" line))) lines))

@@ -4,6 +4,7 @@
 
 (load "include/const.lsp")
 (load "include/clj.lsp")
+(load "include/script.lsp")
 (load "src/argparse.lsp")
 (load "src/os.lsp")
 
@@ -19,13 +20,6 @@
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-(define (script-info script-name)
-  (format "%s, %s" script-name version-string))
-
-(define (display-script-info script-name)
-  (println (script-info script-name))
-  (exit))
 
 (define (get-bat-device-path)
   (->> (exec "upower -e")

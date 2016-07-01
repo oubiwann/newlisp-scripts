@@ -4,6 +4,7 @@
 
 (load "include/const.lsp")
 (load "include/clj.lsp")
+(load "include/script.lsp")
 (load "src/argparse.lsp")
 (load "src/os.lsp")
 
@@ -41,24 +42,13 @@
 ;;; Supporting functions
 ;;;>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-(define (script-info script-name)
-  (format "%s, %s" script-name version-string))
-
-(define (display-script-info script-name)
-  (println (script-info script-name))
-  (exit))
-
-(define (display-unsupported-cmd sys cmd)
-  (println (format "The '%s' command is not supported on %s." cmd sys))
-  (exit))
-
 (define (brightness-linux sys cmd value)
   (case cmd
     ("get" (! "xbacklight -get"))
     ("set" (! (string "xbacklight -set " value)) )
     ("inc" (! (string "xbacklight -inc 10")))
     ("dec" (! (string "xbacklight -dec 10")))
-    (true (display-unsupported-cmd sys cmd))))
+    (true (display-unsupported-cmd cmd))))
 
 (define (get-mac-brightness)
   (-> mac-get-brightness-cmd
@@ -80,14 +70,14 @@
     ("set" (set-mac-brightness value))
     ("inc" (! (format mac-update-brightness-cmd mac-inc)))
     ("dec" (! (format mac-update-brightness-cmd mac-dec)))
-    (true (display-unsupported-cmd sys cmd))))
+    (true (display-unsupported-cmd cmd))))
 
 (define (brightness-cmd cmd value)
   (let ((sys (os:system)))
     (case sys
       ("Linux" (brightness-linux sys cmd value))
       ("Darwin" (brightness-mac sys cmd value))
-      (true  (display-unsupported-cmd sys cmd)))))
+      (true  (display-sys-unsupported-cmd cmd)))))
 
 (define (light-value? value)
   (and (integer? value)
